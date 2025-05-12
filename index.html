@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Festival Timetable</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+:root {
+  --soul: #A8C4A2;
+  --cook: #D7926D;
+  --bush: #8A9A5B;
+  --art: #C8B9E2;
+  --swim: #7ACCCC;
+  --fit: #F9C74F;
+  --feel: #F2AEBB;
+  --talk: #6A4E77;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f8f9fa;
+  color: #2d3436;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: #2d3436;
+  font-weight: 700;
+}
+.header p {
+  margin: 10px 0 0;
+  color: #636e72;
+  font-size: 1.1rem;
+}
+.filters {
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  padding: 15px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.filter-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.filter-btn.active {
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.timetable-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  margin-bottom: 30px;
+}
+.timetable {
+  width: 100%;
+  border-collapse: collapse;
+}
+.timetable thead {
+  background: #2d3436;
+  color: white;
+}
+.timetable th {
+  padding: 16px 12px;
+  text-align: left;
+  font-weight: 600;
+}
+.timetable td {
+  padding: 14px 12px;
+  border-bottom: 1px solid #f1f2f6;
+  vertical-align: middle;
+}
+.time-slot {
+  font-weight: 600;
+  width: 80px;
+  color: #2d3436;
+}
+.class-title {
+  font-weight: 500;
+  font-size: 1.05rem;
+}
+.location {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: #f1f2f6;
+  color: #636e72;
+  margin-top: 6px;
+}
+.category-marker {
+  width: 8px;
+  height: 40px;
+  border-radius: 4px;
+  margin-right: 12px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.soul-marker { background: var(--soul); }
+.cook-marker { background: var(--cook); }
+.bush-marker { background: var(--bush); }
+.art-marker { background: var(--art); }
+.swim-marker { background: var(--swim); }
+.fit-marker { background: var(--fit); }
+.feel-marker { background: var(--feel); }
+.talk-marker { background: var(--talk); }
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.control-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.control-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.print-btn {
+  background: #2d3436;
+  color: white;
+}
+.reset-btn {
+  background: white;
+  color: #2d3436;
+}
+.footer {
+  text-align: center;
+  padding: 20px;
+  color: #636e72;
+  font-size: 0.9rem;
+}
+@media print {
+  body {
+    background: white;
+    padding: 0;
+    font-size: 12pt;
+  }
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+  .header, .timetable-container {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .filters, .controls, .footer {
+    display: none;
+  }
+  .timetable {
+    width: 100%;
+  }
+  .timetable th {
+    background: #2d3436 !important;
+    color: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .timetable tr {
+    page-break-inside: avoid;
+  }
+  .category-marker {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+@media (max-width: 768px) {
+  .timetable th, .timetable td {
+    padding: 12px 8px;
+  }
+  .control-btn {
+    padding: 10px 15px;
+    font-size: 0.9rem;
+  }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Festival Timetable</h1>
+    <p>Plan your perfect festival experience</p>
+  </div>
+
+  <div class="controls">
+    <button class="control-btn print-btn" onclick="window.print()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M5 1a2 2 0 0 0-2 2v1h10V3a2 2 0 0 0-2-2H5zm6 8H5a1 1 0 0 0-1 1v3a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1z"/>
+        <path d="M0 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-1v-2a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v2H2a2 2 0 0 1-2-2V7zm2.5 1a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+      </svg>
+      Print Timetable
+    </button>
+    <button class="control-btn reset-btn" id="resetFilters">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+      </svg>
+      Reset Filters
+    </button>
+  </div>
+
+  <div class="filters">
+    <button class="filter-btn active" data-category="all">All Classes</button>
+    <button class="filter-btn" data-category="soul" style="background:var(--soul);color:white;">Soul Space</button>
+    <button class="filter-btn" data-category="cook" style="background:var(--cook);color:white;">Cookery</button>
+    <button class="filter-btn" data-category="bush" style="background:var(--bush);color:white;">Bushcraft/Nature</button>
+    <button class="filter-btn" data-category="art" style="background:var(--art);color:#2d3436;">Arts & Crafts</button>
+    <button class="filter-btn" data-category="swim" style="background:var(--swim);color:#2d3436;">Swimming</button>
+    <button class="filter-btn" data-category="fit" style="background:var(--fit);color:#2d3436;">Fitness</button>
+    <button class="filter-btn" data-category="feel" style="background:var(--feel);color:#2d3436;">Feel Good Field</button>
+    <button class="filter-btn" data-category="talk" style="background:var(--talk);color:white;">Talk Tent</button>
+  </div>
+
+  <div class="timetable-container">
+    <table class="timetable" id="timetable">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Class</th>
+          <th>Location</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-category="soul">
+          <td class="time-slot">9:00 AM</td>
+          <td><span class="category-marker soul-marker"></span><span class="class-title">Morning Yoga Flow</span></td>
+          <td><span class="location">Shakti Tent</span></td>
+        </tr>
+        <tr data-category="fit">
+          <td class="time-slot">9:00 AM</td>
+          <td><span class="category-marker fit-marker"></span><span class="class-title">HIIT Workout</span></td>
+          <td><span class="location">Fitness Studio 1</span></td>
+        </tr>
+        <tr data-category="cook">
+          <td class="time-slot">9:00 AM</td>
+          <td><span class="category-marker cook-marker"></span><span class="class-title">Vegan Breakfast</span></td>
+          <td><span class="location">The Chef's Kitchen</span></td>
+        </tr>
+        <tr data-category="soul">
+          <td class="time-slot">10:00 AM</td>
+          <td><span class="category-marker soul-marker"></span><span class="class-title">Meditation Session</span></td>
+          <td><span class="location">Om Yoga</span></td>
+        </tr>
+        <tr data-category="bush">
+          <td class="time-slot">10:00 AM</td>
+          <td><span class="category-marker bush-marker"></span><span class="class-title">Wilderness Survival</span></td>
+          <td><span class="location">Darwins Den 1</span></td>
+        </tr>
+        <tr data-category="art">
+          <td class="time-slot">10:00 AM</td>
+          <td><span class="category-marker art-marker"></span><span class="class-title">Pottery Workshop</span></td>
+          <td><span class="location">Arts and Craft 2</span></td>
+        </tr>
+        <tr data-category="swim">
+          <td class="time-slot">11:00 AM</td>
+          <td><span class="category-marker swim-marker"></span><span class="class-title">Open Water Swim</span></td>
+          <td><span class="location">On the Water</span></td>
+        </tr>
+        <tr data-category="feel">
+          <td class="time-slot">11:00 AM</td>
+          <td><span class="category-marker feel-marker"></span><span class="class-title">Sound Healing</span></td>
+          <td><span class="location">Feel Good Tent</span></td>
+        </tr>
+        <tr data-category="talk">
+          <td class="time-slot">11:00 AM</td>
+          <td><span class="category-marker talk-marker"></span><span class="class-title">Mindfulness Talk</span></td>
+          <td><span class="location">Talk Tent</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>© 2023 Festival Name. All rights reserved.</p>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const resetBtn = document.getElementById('resetFilters');
+  const rows = document.querySelectorAll('#timetable tbody tr');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const category = this.getAttribute('data-category');
+      filterButtons.forEach(btn => btn.classList.remove('active'));
+      this.classList.add('active');
+      filterClasses(category);
+    });
+  });
+  
+  resetBtn.addEventListener('click', function() {
+    filterButtons.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('.filter-btn[data-category="all"]').classList.add('active');
+    filterClasses('all');
+  });
+  
+  function filterClasses(category) {
+    rows.forEach(row => {
+      if (category === 'all' || row.getAttribute('data-category') === category) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>
